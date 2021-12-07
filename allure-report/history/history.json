@@ -1,20 +1,21 @@
 {
-  "a319a3cb0d5574a85457a5f2db40f421" : {
+  "a32d0f38a06b32e6bd38271ffdd612ab" : {
     "statistic" : {
       "failed" : 0,
-      "broken" : 0,
+      "broken" : 1,
       "skipped" : 0,
-      "passed" : 1,
+      "passed" : 0,
       "unknown" : 0,
       "total" : 1
     },
     "items" : [ {
-      "uid" : "881536595d8ed32",
-      "status" : "passed",
+      "uid" : "73c1cee19676d03f",
+      "status" : "broken",
+      "statusDetails" : "playwright._impl._api_types.TimeoutError: Timeout 30000ms exceeded.\n=========================== logs ===========================\nwaiting for selector \"input[type='password']\" to be visible\n============================================================",
       "time" : {
-        "start" : 1638796779646,
-        "stop" : 1638796803115,
-        "duration" : 23469
+        "start" : 1638855727968,
+        "stop" : 1638855778873,
+        "duration" : 50905
       }
     } ]
   }
