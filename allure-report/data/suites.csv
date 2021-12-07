@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Mon Dec 06 21:19:39 CST 2021","Mon Dec 06 21:20:03 CST 2021","23469","tests.step_defs","test_form_section","","","","test_the_user_is_able_to_submit_form_without_coupon","/Users/qm.yan/Documents/Codes/ruby_practice_projects/pagebuilder-qa-framework/tests/features/form_section.feature: The user is able to submit form without coupon"

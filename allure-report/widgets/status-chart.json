@@ -1,0 +1,11 @@
+[ {
+  "uid" : "881536595d8ed32",
+  "name" : "test_the_user_is_able_to_submit_form_without_coupon",
+  "time" : {
+    "start" : 1638796779646,
+    "stop" : 1638796803115,
+    "duration" : 23469
+  },
+  "status" : "passed",
+  "severity" : "normal"
+} ]

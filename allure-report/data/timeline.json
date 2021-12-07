@@ -1,0 +1,26 @@
+{
+  "uid" : "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+  "name" : "timeline",
+  "children" : [ {
+    "name" : "qmyan-Mac.local",
+    "children" : [ {
+      "name" : "69049-MainThread",
+      "children" : [ {
+        "name" : "test_the_user_is_able_to_submit_form_without_coupon",
+        "uid" : "881536595d8ed32",
+        "parentUid" : "b6146a43669ed5b574586f53bff3a3ca",
+        "status" : "passed",
+        "time" : {
+          "start" : 1638796779646,
+          "stop" : 1638796803115,
+          "duration" : 23469
+        },
+        "flaky" : false,
+        "newFailed" : false,
+        "parameters" : [ ]
+      } ],
+      "uid" : "b6146a43669ed5b574586f53bff3a3ca"
+    } ],
+    "uid" : "e867c3c42f3a9757bb47e9efaf08b30e"
+  } ]
+}
