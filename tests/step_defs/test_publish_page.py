@@ -9,15 +9,16 @@ from pages.edit_page import EditPage
 scenarios('../features/publish_page.feature')
 
 
-@given(parsers.parse('I navigate to website "{url}" with valid credential'))
-def login(page, url):
+@given(parsers.parse('I navigate to pagebuilder website with valid credential'))
+def login(page):
     login_page = AutomizelyLoginPage(page)
-    login_page.login(url)
+    login_page.login()
 
 
-@then(parsers.parse('I should see the page title "{page_title}"'))
-def verify_page_title(page, page_title):
-    assert page.title() == page_title, "Fail to login"
+@then(parsers.parse('I should see the pagebuilder logo'))
+def verify_page_title(page):
+    pb_base_page = BasePage(page)
+    pb_base_page.is_page_logo_visible()
 
 
 @given(parsers.parse('the user click on menu "{page_type}"'))
@@ -48,4 +49,4 @@ def publish_page_with_template(page, template_name, page_type):
 @then('the user should see the Published successfully modal pop up')
 def check_if_publish_successfully_modal_pop_up(page):
     edit_page = EditPage(page)
-    assert edit_page.is_publish_successfully_modal_pop_up(), "publish page failed"
+    edit_page.is_publish_successfully_modal_pop_up()

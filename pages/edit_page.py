@@ -16,13 +16,7 @@ class EditPage(BasePage):
         return self.page.get_attribute(EditPageLocators.page_name, "value")
 
     def is_publish_successfully_modal_pop_up(self):
-        try:
-            self.page.wait_for_selector(EditPageLocators.publish_successfully_modal, timeout=35)
-            print("publish succesfully")
-            return True
-        except:
-            print("publish failed.........lol")
-            return False
+        assert self.wait_for_selector_state(selector=EditPageLocators.publish_successfully_modal, state='visible'), "publish page failed"
 
     def assign_product_or_collection(self, page_type):
         if page_type == "Product pages":
@@ -73,3 +67,6 @@ class EditPage(BasePage):
             self.page.click("//input[@value='customCoupon']//parent::span")
             self.page.fill("//input[contains(@name,'couponCode')]", "test")
         self.page.click(EditPageLocators.back_button)
+
+    def view_live_page(self):
+        self.click_on_span_contains_text("View live page")

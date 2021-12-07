@@ -7,10 +7,12 @@ from pages.base_page import BasePage
 class ShopifyPage(BasePage):
 
     def input_store_password(self):
-        if self.page.is_visible(ShopifyPageLocators.password):
+        if self.wait_for_selector_state(ShopifyPageLocators.password, "visible"):
+            print("find element password input")
             self.page.fill(ShopifyPageLocators.password, "123456")
             self.page.click(ShopifyPageLocators.submit)
         else:
+            print("didn't find element password input")
             pass
 
     def close_preview_bar(self):
@@ -24,9 +26,8 @@ class ShopifyPage(BasePage):
         self.page.fill(ShopifyPageLocators.email_input, email)
         self.page.click(ShopifyPageLocators.subscribe_btn)
 
-    def is_element_exist(self, coupon_code):
-        time.sleep(1)
-        return self.page.is_visible(ShopifyPageLocators.coupon_code.format(coupon_code))
+    def is_element_exists(self, coupon_code):
+        assert self.wait_for_selector_state(ShopifyPageLocators.coupon_code.format(coupon_code), "visible")
 
     def the_email_exists(self, email):
         self.page.click(ShopifyPageLocators.customer_menu)

@@ -3,6 +3,7 @@ class ShopifyPageLocators:
     login page locators
     """
     email = "input[type='email']"
+    password_label = "label[for='password']"
     password = "input[type='password']"
     submit = "button[type='submit']"
 

@@ -1,8 +1,8 @@
 Feature: The user is able to publish any kind of page from the template list
 
   Background:
-    Given I navigate to website "/" with valid credential
-    Then I should see the page title "Automizely Page Builder"
+    Given I navigate to pagebuilder website with valid credential
+    Then I should see the pagebuilder logo
 
   Scenario Outline: The user is able to publish regular page or blog post page or home page
     Given the user click on menu "<page_type>"
@@ -23,5 +23,4 @@ Feature: The user is able to publish any kind of page from the template list
       | page_type        | template_name                |
       | Product pages    | Christmas 02 page_list       |
       | Collection pages | Collection Page 01 page_list |
-
 
