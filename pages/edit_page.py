@@ -92,6 +92,7 @@ class EditPage(BasePage):
             self.click_on_span_contains_text("Add section")
             self.page.dispatch_event("text=Product detailAdd >> button", "click")
             self.click_on_span_contains_text("Select product")
+        breakpoint()
         self.page.locator(".Polaris-ResourceItem__Container").locator(
             ".Polaris-RadioButton__Backdrop:nth-child(3)").click()
         self.page.wait_for_selector(EditPageLocators.checkbox_in_product_chosen_modal.format(random.randint(1, 8)),
