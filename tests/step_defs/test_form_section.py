@@ -1,3 +1,4 @@
+import pytest
 from pytest_bdd import given, when, then, parsers, scenarios
 
 from pages.automizely_login_page import AutomizelyLoginPage
@@ -8,13 +9,13 @@ from pages.shopify_page import ShopifyPage
 scenarios('../features/form_section.feature')
 
 
-@given(parsers.parse('I navigate to pagebuilder website with valid credential'))
+@given(parsers.parse('I navigate to PageBuilder website with valid credential'))
 def login(page):
     login_page = AutomizelyLoginPage(page)
     login_page.login()
 
 
-@then(parsers.parse('I should see the pagebuilder logo'))
+@then(parsers.parse('I should see the PageBuilder logo'))
 def verify_page_title(page):
     pb_base_page = BasePage(page)
     pb_base_page.is_page_logo_visible()
@@ -44,25 +45,34 @@ def visit_page(page, page_url):
 
 
 @when(parsers.parse('the user submit form with "{email}"'))
-def submit_form(page, context, email):
-    shopify_page = ShopifyPage(page)
+def submit_form(page, email):
     edit_page = EditPage(page)
-    breakpoint()
-    edit_page.click_on_span_contains_text("View page")
+    # switch tab to shopify store after clicking "view page"
+    with page.context.expect_page() as new_page_info:
+        edit_page.click_on_span_contains_text("View page")
+    new_page = new_page_info.value
+    shopify_page = ShopifyPage(new_page)
     shopify_page.input_store_password()
-    edit_page.click_on_span_contains_text("View page")
+    shopify_page.page.close()
+    # switch tab to shopify store after clicking "view page"
+    with page.context.expect_page() as new_page_info:
+        edit_page.click_on_span_contains_text("View page")
+    new_page = new_page_info.value
+    # waiting for page loading, otherwise will return "NoneType" error
+    new_page.wait_for_load_state()
+    shopify_page = ShopifyPage(new_page)
     shopify_page.submit_form(email)
-    page.frame()
 
 
 @then(parsers.parse('the user should see the coupon "{coupon_code}" is shown'))
 def the_user_see_coupon_code(page, coupon_code):
-    shopify_page = ShopifyPage(page)
-    shopify_page.is_element_exists(coupon_code), "submit form failed"
+    set_active_tab = page.context.pages.pop(1)
+    shopify_page = ShopifyPage(set_active_tab)
+    shopify_page.is_coupon_show(coupon_code), "submit form failed"
 
 
-@then(parsers.parse('the email "{email}" is created in shopify admin'))
-def the_email_is_created_in_shopify_admin(page, email):
-    shopify_page = ShopifyPage(page)
-    # shopify_page.login_in()
-    assert shopify_page.the_email_exists(email), "the email is not created in shopify admin"
+@then(parsers.parse('the user should see the message "{subscribing_message}" show'))
+def see_the_subscribing_message_without_coupon(page, subscribing_message):
+    set_active_tab = page.context.pages.pop(1)
+    shopify_page = ShopifyPage(set_active_tab)
+    shopify_page.is_subscribing_without_coupon_message_show

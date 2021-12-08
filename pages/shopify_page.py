@@ -8,11 +8,8 @@ class ShopifyPage(BasePage):
 
     def input_store_password(self):
         if self.wait_for_selector_state(ShopifyPageLocators.password, "visible"):
-            print("find element password input")
             self.page.fill(ShopifyPageLocators.password, "123456")
             self.page.click(ShopifyPageLocators.submit)
-        else:
-            print("didn't find element password input")
             pass
 
     def close_preview_bar(self):
@@ -23,10 +20,11 @@ class ShopifyPage(BasePage):
             pass
 
     def submit_form(self, email):
+        self.scroll_into_view(ShopifyPageLocators.form_section)
         self.page.fill(ShopifyPageLocators.email_input, email)
         self.page.click(ShopifyPageLocators.subscribe_btn)
 
-    def is_element_exists(self, coupon_code):
+    def is_coupon_show(self, coupon_code):
         assert self.wait_for_selector_state(ShopifyPageLocators.coupon_code.format(coupon_code), "visible")
 
     def the_email_exists(self, email):
@@ -37,3 +35,12 @@ class ShopifyPage(BasePage):
     def is_product_list_display_correctly(self, added_products_total):
         assert len(
             self.page.query_selector_all(ShopifyPageLocators.products_added_to_list_section)) == added_products_total
+
+    def is_subscribing_without_coupon_message_show(self, message):
+        assert self.page.wait_for_selector(ShopifyPageLocators.subscribing_message,
+                                           state="visible").text_content() == message
+
+    def is_product_detail_display_correctly(self, product_title):
+        self.scroll_into_view(ShopifyPageLocators.product_detail_section)
+        assert self.page.text_content(
+            ShopifyPageLocators.product_title_in_product_detail_section) == product_title, "display wrong product"

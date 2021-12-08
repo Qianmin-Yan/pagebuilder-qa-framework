@@ -9,13 +9,13 @@ from pages.edit_page import EditPage
 scenarios('../features/publish_page.feature')
 
 
-@given(parsers.parse('I navigate to pagebuilder website with valid credential'))
+@given(parsers.parse('I navigate to PageBuilder website with valid credential'))
 def login(page):
     login_page = AutomizelyLoginPage(page)
     login_page.login()
 
 
-@then(parsers.parse('I should see the pagebuilder logo'))
+@then(parsers.parse('I should see the PageBuilder logo'))
 def verify_page_title(page):
     pb_base_page = BasePage(page)
     pb_base_page.is_page_logo_visible()

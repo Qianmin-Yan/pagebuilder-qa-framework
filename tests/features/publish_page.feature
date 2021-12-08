@@ -1,8 +1,8 @@
 Feature: The user is able to publish any kind of page from the template list
 
   Background:
-    Given I navigate to pagebuilder website with valid credential
-    Then I should see the pagebuilder logo
+    Given I navigate to PageBuilder website with valid credential
+    Then I should see the PageBuilder logo
 
   Scenario Outline: The user is able to publish regular page or blog post page or home page
     Given the user click on menu "<page_type>"

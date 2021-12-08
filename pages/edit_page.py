@@ -1,9 +1,16 @@
+import random
 import time
+
+from playwright.sync_api import Page
+
 from locators.edit_page_locators import EditPageLocators
 from pages.base_page import BasePage
 
 
 class EditPage(BasePage):
+    def __init__(self, page: Page):
+        super().__init__(page)
+        self.page = page
 
     def publish_page(self):
         self.page.click(EditPageLocators.publish_btn)
@@ -16,7 +23,8 @@ class EditPage(BasePage):
         return self.page.get_attribute(EditPageLocators.page_name, "value")
 
     def is_publish_successfully_modal_pop_up(self):
-        assert self.wait_for_selector_state(selector=EditPageLocators.publish_successfully_modal, state='visible'), "publish page failed"
+        assert self.wait_for_selector_state(selector=EditPageLocators.publish_successfully_modal,
+                                            state='visible'), "publish page failed"
 
     def assign_product_or_collection(self, page_type):
         if page_type == "Product pages":
@@ -36,7 +44,7 @@ class EditPage(BasePage):
                     self.page.click(EditPageLocators.delete_button)
         else:
             self.click_on_span_contains_text("Add section")
-            self.page.query_selector("h2:has-text('Sales boost')").scroll_into_view_if_needed()
+            self.page.wait_for_selector("h2:has-text('Sales boost')").scroll_into_view_if_needed()
             self.page.dispatch_event("text=Product listAdd >> button", "click")
 
         self.click_on_span_contains_text("Add products")
@@ -58,15 +66,43 @@ class EditPage(BasePage):
         time.sleep(2)
         if self.page.is_visible(EditPageLocators.span_contain_text.format("Form")):
             self.click_on_span_contains_text("Form")
-            if self.page.is_checked("input[value='noCoupon']"):
-                self.page.click("//input[@value='customCoupon']//parent::span")
-                self.page.fill("//input[contains(@name,'couponCode')]", "test")
+            if self.page.is_checked(EditPageLocators.form_without_coupon_option):
+                self.page.click(EditPageLocators.form_with_coupon_option)
+                self.page.fill(EditPageLocators.form_coupon_input, "test")
         else:
             self.click_on_span_contains_text("Add section")
             self.page.dispatch_event("text=FormAdd >> button", "click")
-            self.page.click("//input[@value='customCoupon']//parent::span")
-            self.page.fill("//input[contains(@name,'couponCode')]", "test")
+            self.page.click(EditPageLocators.form_with_coupon_option)
+            self.page.fill(EditPageLocators.form_coupon_input, "test")
         self.page.click(EditPageLocators.back_button)
 
     def view_live_page(self):
         self.click_on_span_contains_text("View live page")
+
+    def add_product_detail_with_random_product(self):
+        self.page.click(EditPageLocators.content_tab)
+        time.sleep(2)
+        if self.page.is_visible(EditPageLocators.span_contain_text.format("Product detail")):
+            self.click_on_span_contains_text("Product detail")
+            if self.page.is_visible(EditPageLocators.added_product_in_product_detail):
+                self.click_on_span_contains_text("Change product")
+            else:
+                self.click_on_span_contains_text("Select product")
+        else:
+            self.click_on_span_contains_text("Add section")
+            self.page.dispatch_event("text=Product detailAdd >> button", "click")
+            self.click_on_span_contains_text("Select product")
+        self.page.locator(".Polaris-ResourceItem__Container").locator(
+            ".Polaris-RadioButton__Backdrop:nth-child(3)").click()
+        self.page.wait_for_selector(EditPageLocators.checkbox_in_product_chosen_modal.format(random.randint(1, 8)),
+                                    state="visible").click()
+        self.click_on_span_contains_text("Add")
+        self.page.click(EditPageLocators.back_button)
+
+    def get_added_product_title(self):
+        return self.page.text_content(EditPageLocators.added_product_title)
+
+    def get_added_products_title(self):
+        products_title = []
+        for product in self.page.query_selector_all(EditPageLocators.added_product_title):
+            products_title.append(product.text_content())

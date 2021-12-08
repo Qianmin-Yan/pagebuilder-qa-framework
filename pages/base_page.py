@@ -32,3 +32,6 @@ class BasePage:
         locator = self.page.locator(selector)
         locator.wait_for(timeout=30000, state=state)
         return True
+
+    def scroll_into_view(self, selector):
+        self.page.query_selector(selector).scroll_into_view_if_needed()

@@ -40,3 +40,7 @@ class ShopifyPageLocators:
     close_preview_bar = "//button[contains(text(),'Hide bar')]"
     coupon_code = "//input[@value='{}']"
     products_added_to_list_section = ".apb_product_list_product_item"
+    form_section = ".apb_customer_form_section"
+    subscribing_message = ".apb_customer_form_banner_description"
+    product_title_in_product_detail_section = ".apb_product_detail_information_title a"
+    product_detail_section = ".apb_product_detail_section"
