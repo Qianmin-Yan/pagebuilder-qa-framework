@@ -8,7 +8,7 @@ class BasePage:
         self.page = page
 
     def is_page_logo_visible(self):
-        assert self.wait_for_selector_state(PBBasePageLocators.page_logo, "visible"), "Failed to login"
+        assert self.wait_for_selector_state(PBBasePageLocators.page, "visible"), "Failed to login"
 
     def click_on_span_contains_text(self, text):
         self.page.click(PBBasePageLocators.span_contain_text.format(text))

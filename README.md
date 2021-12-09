@@ -23,3 +23,11 @@ pytest --headed --base-url https://page-builder.automizely.io tests/step_defs/te
 
 ### How to debug
 add `breakpoint()` into code and run project
+
+
+### code snippet for some cases 
+1. new page is created after clicking on an element, get the new page to interact with
+![img.png](img.png)
+
+2. enable force click when the normal click will be intercepted by the ancestor element
+`page.click(selector, force=True)`

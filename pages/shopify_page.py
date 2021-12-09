@@ -42,5 +42,4 @@ class ShopifyPage(BasePage):
 
     def is_product_detail_display_correctly(self, product_title):
         self.scroll_into_view(ShopifyPageLocators.product_detail_section)
-        assert self.page.text_content(
-            ShopifyPageLocators.product_title_in_product_detail_section) == product_title, "display wrong product"
+        assert self.page.text_content(ShopifyPageLocators.product_title_in_product_detail_section).strip() == product_title, "display wrong product"

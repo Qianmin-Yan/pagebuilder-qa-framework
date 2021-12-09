@@ -35,7 +35,6 @@ def add_product_detail_into_first_page(page, page_type):
     edit_page = EditPage(page)
     edit_page.click_on_first_page_in_page_list()
     edit_page.add_product_detail_with_random_product()
-    DATA_KEEPER['product_title'] = edit_page.get_added_product_title()
     edit_page.switch_tab("Settings")
     edit_page.publish_page()
     if page_type == "Home page":
@@ -50,7 +49,7 @@ def check_if_publish_successfully_modal_pop_up(page):
     edit_page.is_publish_successfully_modal_pop_up(), "publish page failed"
 
 
-@given(parsers.parse("the user is able to see the same product in live page"))
+@then(parsers.parse("the user is able to see the same product in live page"))
 def check_if_product_detail_display_correctly(page):
     edit_page = EditPage(page)
     # switch tab to shopify store after clicking "view page"

@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from pytest_bdd import given, when, then, parsers, scenarios
 
@@ -13,6 +15,7 @@ scenarios('../features/form_section.feature')
 def login(page):
     login_page = AutomizelyLoginPage(page)
     login_page.login()
+    time.sleep(3)
 
 
 @then(parsers.parse('I should see the PageBuilder logo'))

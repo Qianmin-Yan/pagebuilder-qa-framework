@@ -8,6 +8,7 @@ from pages.base_page import BasePage
 class AutomizelyLoginPage(BasePage):
 
     def login(self):
+        self.page.context.clear_cookies()
         self.page.goto("/")
         time.sleep(3)
         self.page.click(LoginPageLocators.email)

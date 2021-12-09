@@ -3,7 +3,7 @@ rm -r allure-results/* || echo "No results"
 
 echo "-> Start tests"
 #pytest -n auto  tests --alluredir allure-results
-pytest --headed --base-url https://page-builder.automizely.io tests/step_defs/test_product_detail_section.py --alluredir allure-results
+pytest --headed --base-url https://page-builder.automizely.io tests/step_defs/ --alluredir allure-results
 echo "-> Test finished"
 
 echo "-> Generating report"
