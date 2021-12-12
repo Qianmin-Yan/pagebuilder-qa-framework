@@ -1,4 +1,7 @@
 from playwright.sync_api import Page
+
+from constants.contants import PASSWORD
+from locators.automizely_login_locators import LoginPageLocators
 from locators.page_builder_base_page_locators import PBBasePageLocators
 
 
@@ -8,6 +11,12 @@ class BasePage:
         self.page = page
 
     def is_page_logo_visible(self):
+        while self.page.is_visible(PBBasePageLocators.return_to_login, timeout=5000):
+            self.page.click(PBBasePageLocators.return_to_login)
+            self.page.type(LoginPageLocators.password, PASSWORD)
+            self.page.click(LoginPageLocators.login_btn)
+            if self.page.is_visible(PBBasePageLocators.page, timeout=5000):
+                break
         assert self.wait_for_selector_state(PBBasePageLocators.page, "visible"), "Failed to login"
 
     def click_on_span_contains_text(self, text):

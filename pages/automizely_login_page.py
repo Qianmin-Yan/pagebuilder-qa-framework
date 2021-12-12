@@ -1,5 +1,3 @@
-import time
-
 from constants.contants import USER_NAME, PASSWORD
 from locators.automizely_login_locators import LoginPageLocators
 from pages.base_page import BasePage
@@ -8,9 +6,8 @@ from pages.base_page import BasePage
 class AutomizelyLoginPage(BasePage):
 
     def login(self):
-        self.page.context.clear_cookies()
         self.page.goto("/")
-        time.sleep(3)
+        self.page.wait_for_timeout(3000)
         self.page.click(LoginPageLocators.email)
         self.page.fill(LoginPageLocators.email, USER_NAME)
         self.page.click(LoginPageLocators.password)

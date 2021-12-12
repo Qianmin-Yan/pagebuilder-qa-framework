@@ -1,3 +1,4 @@
+@ui @form
 Feature: The user is able to submit form with or without form
 
   Background:

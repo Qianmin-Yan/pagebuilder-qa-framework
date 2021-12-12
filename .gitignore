@@ -1,5 +1,6 @@
 allure-report
 allure-results
 .pytest_cache
-*/.pytest_cache
-*/step_defs/.pytest_cache
+tests/step_defs/.pytest_cache
+tests/.pytest_cache
+*.pyc

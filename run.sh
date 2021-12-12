@@ -2,8 +2,7 @@ echo "-> Removing old Allure results"
 rm -r allure-results/* || echo "No results"
 
 echo "-> Start tests"
-#pytest -n auto  tests --alluredir allure-results
-pytest --headed --base-url https://page-builder.automizely.io tests/step_defs/ --alluredir allure-results
+pytest --headed --base-url https://page-builder.automizely.io -m "form" --gherkin-terminal-reporter --alluredir allure-results
 echo "-> Test finished"
 
 echo "-> Generating report"

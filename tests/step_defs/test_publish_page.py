@@ -1,24 +1,14 @@
-import time
-from pytest_bdd import given, when, then, parsers, scenarios
+from pytest_bdd import given, when, then, parsers, scenarios, scenario
 
 from locators.edit_page_locators import EditPageLocators
-from pages.automizely_login_page import AutomizelyLoginPage
 from pages.base_page import BasePage
 from pages.edit_page import EditPage
 
 scenarios('../features/publish_page.feature')
 
 
-@given(parsers.parse('I navigate to PageBuilder website with valid credential'))
-def login(page):
-    login_page = AutomizelyLoginPage(page)
-    login_page.login()
-
-
-@then(parsers.parse('I should see the PageBuilder logo'))
-def verify_page_title(page):
-    pb_base_page = BasePage(page)
-    pb_base_page.is_page_logo_visible()
+def test_conftest():
+    pass
 
 
 @given(parsers.parse('the user click on menu "{page_type}"'))
@@ -33,7 +23,7 @@ def publish_page_from_template(page, template_name, page_type):
     edit_page.click_on_template_in_page_list(template_name)
     edit_page.publish_page()
     if page_type == "Home page":
-        time.sleep(0.5)
+        page.wait_for_timeout(500)
         if edit_page.page.is_visible(EditPageLocators.confirm_to_publish_home_page_modal):
             edit_page.click_on_span_contains_text("Confirm")
 

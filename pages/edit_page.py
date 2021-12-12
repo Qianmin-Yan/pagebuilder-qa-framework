@@ -1,7 +1,4 @@
 import random
-import time
-
-from playwright.sync_api import Page
 
 from constants.contants import DATA_KEEPER
 from locators.edit_page_locators import EditPageLocators
@@ -9,9 +6,6 @@ from pages.base_page import BasePage
 
 
 class EditPage(BasePage):
-    def __init__(self, page: Page):
-        super().__init__(page)
-        self.page = page
 
     def publish_page(self):
         self.page.click(EditPageLocators.publish_btn)
@@ -37,7 +31,7 @@ class EditPage(BasePage):
 
     def add_product_list_with_products(self, added_products_total):
         self.page.click(EditPageLocators.content_tab)
-        time.sleep(2)
+        self.page.wait_for_timeout(2000)
         if self.page.is_visible(EditPageLocators.span_contain_text.format("Product list")):
             self.click_on_span_contains_text("Product list")
             if self.page.is_visible(EditPageLocators.added_product_in_product_list):
@@ -64,7 +58,7 @@ class EditPage(BasePage):
 
     def add_form_with_coupon(self):
         self.page.click(EditPageLocators.content_tab)
-        time.sleep(2)
+        self.page.wait_for_timeout(2000)
         if self.page.is_visible(EditPageLocators.span_contain_text.format("Form")):
             self.click_on_span_contains_text("Form")
             if self.page.is_checked(EditPageLocators.form_without_coupon_option):
@@ -82,7 +76,7 @@ class EditPage(BasePage):
 
     def add_product_detail_with_random_product(self):
         self.page.click(EditPageLocators.content_tab)
-        time.sleep(2)
+        self.page.wait_for_timeout(2000)
         if self.page.is_visible(EditPageLocators.span_contain_text.format("Product detail")):
             self.click_on_span_contains_text("Product detail")
             if self.page.is_visible(EditPageLocators.added_product_in_product_detail):
@@ -109,3 +103,11 @@ class EditPage(BasePage):
         products_title = []
         for product in self.page.query_selector_all(EditPageLocators.added_product_title):
             products_title.append(product.text_content())
+
+    def add_product_detail_with_random_product_to_product_page(self):
+        while self.page.is_visible(EditPageLocators.delete_button):
+            self.page.click(EditPageLocators.delete_button)
+        self.click_on_span_contains_text("Select products")
+        self.page.click(EditPageLocators.checkbox_button_in_product_chosen_modal.format(random.randint(1, 8)))
+        self.click_on_span_contains_text("Add")
+        DATA_KEEPER['product_title'] = self.get_added_product_title()

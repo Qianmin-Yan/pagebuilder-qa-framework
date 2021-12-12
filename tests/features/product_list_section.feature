@@ -1,4 +1,6 @@
+@ui @product_list
 Feature: The user is able to show product list in page
+
   Background:
     Given I navigate to PageBuilder website with valid credential
     Then I should see the PageBuilder logo

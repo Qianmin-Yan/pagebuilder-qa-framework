@@ -1,3 +1,4 @@
+@ui @product_detail
 Feature: The user is able to show product detail in page
 
   Background:
@@ -8,18 +9,15 @@ Feature: The user is able to show product detail in page
     Given the user click on menu "<page_type>"
     When the user add product detail into the first "<page_type>" with random product
     Then the user should see the Published successfully modal pop up
-    And the user is able to see the same product in live page
+    And the user is able to see the same product in "<page_type>"
     Examples:
-      | page_type     |
-      | Regular pages |
-      | Home page     |
+      | page_type        |
+      | Regular pages    |
+      | Home page        |
+      | Collection pages |
 
-#  Scenario Outline: The user is able to show product detail in collection or product page
-#    Given the user click on menu "<page_type>"
-#    When the user add product detail into the first "<page_type>" with random product
-#    Then the user should see the Published successfully modal pop up
-#    And the user is able to see the same product in live page
-#    Examples:
-#      | page_type     |
-#      | Regular pages |
-#      | Home page     |
+  Scenario: The user is able to show product detail in product page
+    Given the user click on menu "Product pages"
+    When the user add product detail into the first product page with random product
+    Then the user should see the Published successfully modal pop up
+    And the user is able to see the same product in "Product pages"

@@ -1,27 +1,13 @@
-import time
-
-import pytest
 from pytest_bdd import given, when, then, parsers, scenarios
 
-from pages.automizely_login_page import AutomizelyLoginPage
 from pages.edit_page import EditPage
-from pages.base_page import BasePage
 from pages.shopify_page import ShopifyPage
 
 scenarios('../features/form_section.feature')
 
 
-@given(parsers.parse('I navigate to PageBuilder website with valid credential'))
-def login(page):
-    login_page = AutomizelyLoginPage(page)
-    login_page.login()
-    time.sleep(3)
-
-
-@then(parsers.parse('I should see the PageBuilder logo'))
-def verify_page_title(page):
-    pb_base_page = BasePage(page)
-    pb_base_page.is_page_logo_visible()
+def test_conftest():
+    pass
 
 
 @given("the user add form with coupon into the first regular page")
@@ -78,4 +64,4 @@ def the_user_see_coupon_code(page, coupon_code):
 def see_the_subscribing_message_without_coupon(page, subscribing_message):
     set_active_tab = page.context.pages.pop(1)
     shopify_page = ShopifyPage(set_active_tab)
-    shopify_page.is_subscribing_without_coupon_message_show
+    shopify_page.is_subscribing_without_coupon_message_show(subscribing_message)

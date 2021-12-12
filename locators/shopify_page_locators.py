@@ -42,5 +42,5 @@ class ShopifyPageLocators:
     products_added_to_list_section = ".apb_product_list_product_item"
     form_section = ".apb_customer_form_section"
     subscribing_message = ".apb_customer_form_banner_description"
-    product_title_in_product_detail_section = ".apb_product_detail_information_title a"
+    product_title_in_product_detail_section = ".apb_product_detail_information_title"
     product_detail_section = ".apb_product_detail_section"
