@@ -18,6 +18,7 @@ class BasePage:
             if self.page.is_visible(PBBasePageLocators.page, timeout=5000):
                 break
         assert self.wait_for_selector_state(PBBasePageLocators.page, "visible"), "Failed to login"
+        assert self.wait_for_selector_state(PBBasePageLocators.page_logo, "visible"), "Failed to login"
 
     def click_on_span_contains_text(self, text):
         self.page.click(PBBasePageLocators.span_contain_text.format(text))

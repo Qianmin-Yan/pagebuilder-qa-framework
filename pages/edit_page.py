@@ -1,6 +1,5 @@
 import random
 
-from constants.contants import DATA_KEEPER
 from locators.edit_page_locators import EditPageLocators
 from pages.base_page import BasePage
 
@@ -26,7 +25,7 @@ class EditPage(BasePage):
             self.click_on_span_contains_text("Select products")
         else:
             self.click_on_span_contains_text("Select collections")
-        self.page.click(EditPageLocators.checkbox_button_in_product_chosen_modal.format(1))
+        self.page.click(EditPageLocators.checkbox_in_product_chosen_modal.format(1))
         self.click_on_span_contains_text("Add")
 
     def add_product_list_with_products(self, added_products_total):
@@ -44,7 +43,7 @@ class EditPage(BasePage):
 
         self.click_on_span_contains_text("Add products")
         for i in range(0, added_products_total):
-            self.page.click(EditPageLocators.checkbox_button_in_product_chosen_modal.format(i + 1))
+            self.page.click(EditPageLocators.checkbox_in_product_chosen_modal.format(i + 1))
         self.click_on_span_contains_text("Add")
         self.page.click(EditPageLocators.back_button)
 
@@ -87,13 +86,12 @@ class EditPage(BasePage):
             self.click_on_span_contains_text("Add section")
             self.page.dispatch_event("text=Product detailAdd >> button", "click")
             self.click_on_span_contains_text("Select product")
-        # enable force click, avoiding the click event intercepts by the ancestor element
-        while self.page.is_disabled(EditPageLocators.span_contain_text.format("Add")):
-            self.page.wait_for_selector(
-                EditPageLocators.radio_button_in_product_chosen_modal.format(random.randint(1, 8)),
-                state="visible").click(force=True)
+        breakpoint()
+        self.page.locator(".Polaris-ResourceItem__Container").locator(
+            ".Polaris-RadioButton__Backdrop:nth-child(3)").click()
+        self.page.wait_for_selector(EditPageLocators.checkbox_in_product_chosen_modal.format(random.randint(1, 8)),
+                                    state="visible").click()
         self.click_on_span_contains_text("Add")
-        DATA_KEEPER['product_title'] = self.get_added_product_title()
         self.page.click(EditPageLocators.back_button)
 
     def get_added_product_title(self):

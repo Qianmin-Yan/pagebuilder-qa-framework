@@ -33,7 +33,6 @@ _pytest --headed --base-url https://page-builder.automizely.io -m "form" --allur
 ### How to debug
 add `breakpoint()` into code and run project
 
-
 ### code snippet for some cases 
 1. new page is created after clicking on an element, get the new page to interact with
 
