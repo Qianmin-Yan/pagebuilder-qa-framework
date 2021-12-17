@@ -1,4 +1,3 @@
-import pytest
 from pytest_bdd import parsers, given, then
 
 from pages.automizely_login_page import AutomizelyLoginPage

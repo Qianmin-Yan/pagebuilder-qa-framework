@@ -21,7 +21,7 @@ class EditPage(BasePage):
         assert self.wait_for_selector_state(selector=EditPageLocators.publish_successfully_modal,
                                             state='visible'), "publish page failed"
 
-    def assign_product_or_collection(self, page_type):
+    def assign_product_or_collection_for_page_creation(self, page_type):
         if page_type == "Product pages":
             self.click_on_span_contains_text("Select products")
         else:
@@ -30,70 +30,74 @@ class EditPage(BasePage):
         self.click_on_span_contains_text("Add")
 
     def add_product_list_with_products(self, added_products_total):
-        self.page.click(EditPageLocators.content_tab)
-        self.page.wait_for_timeout(2000)
+        self.switch_tab("Content")
+        self.page.wait_for_timeout(1000)
         if self.page.is_visible(EditPageLocators.span_contain_text.format("Product list")):
             self.click_on_span_contains_text("Product list")
             if self.page.is_visible(EditPageLocators.added_product_in_product_list):
                 while self.page.is_visible(EditPageLocators.delete_button):
                     self.page.click(EditPageLocators.delete_button)
         else:
-            self.click_on_span_contains_text("Add section")
-            self.page.wait_for_selector("h2:has-text('Sales boost')").scroll_into_view_if_needed()
-            self.page.dispatch_event("text=Product listAdd >> button", "click")
-
-        self.click_on_span_contains_text("Add products")
-        for i in range(0, added_products_total):
-            self.page.click(EditPageLocators.checkbox_button_in_product_chosen_modal.format(i + 1))
-        self.click_on_span_contains_text("Add")
+            self.add_section("Sales boost", "Product list")
+        self.assign_product_to_product_list(added_products_total)
         self.page.click(EditPageLocators.back_button)
 
     def switch_tab(self, tab_name):
         if tab_name == "Settings":
             self.page.click(EditPageLocators.settings_tab)
         elif tab_name == "Content":
-            self.page.click(EditPageLocators.settings_tab)
+            self.page.click(EditPageLocators.content_tab)
         elif tab_name == "Style":
             self.page.click(EditPageLocators.style_tab)
 
-    def add_form_with_coupon(self):
-        self.page.click(EditPageLocators.content_tab)
+    def add_form_with_coupon(self, coupon_code):
+        self.switch_tab("Content")
         self.page.wait_for_timeout(2000)
         if self.page.is_visible(EditPageLocators.span_contain_text.format("Form")):
             self.click_on_span_contains_text("Form")
             if self.page.is_checked(EditPageLocators.form_without_coupon_option):
                 self.page.click(EditPageLocators.form_with_coupon_option)
-                self.page.fill(EditPageLocators.form_coupon_input, "test")
+                self.page.fill(EditPageLocators.form_coupon_input, coupon_code)
         else:
-            self.click_on_span_contains_text("Add section")
-            self.page.dispatch_event("text=FormAdd >> button", "click")
+            self.add_section("Form", "Form")
             self.page.click(EditPageLocators.form_with_coupon_option)
-            self.page.fill(EditPageLocators.form_coupon_input, "test")
+            self.page.fill(EditPageLocators.form_coupon_input, coupon_code)
+        self.page.click(EditPageLocators.back_button)
+
+    def add_form_without_coupon(self):
+        self.page.click(EditPageLocators.content_tab)
+        self.page.wait_for_timeout(2000)
+        if self.page.is_visible(EditPageLocators.span_contain_text.format("Form")):
+            self.click_on_span_contains_text("Form")
+            if self.page.is_checked(EditPageLocators.form_with_coupon_option):
+                self.page.click(EditPageLocators.form_without_coupon_option)
+        else:
+            self.add_section("Form", "Form")
         self.page.click(EditPageLocators.back_button)
 
     def view_live_page(self):
         self.click_on_span_contains_text("View live page")
 
-    def add_product_detail_with_random_product(self):
-        self.page.click(EditPageLocators.content_tab)
-        self.page.wait_for_timeout(2000)
-        if self.page.is_visible(EditPageLocators.span_contain_text.format("Product detail")):
-            self.click_on_span_contains_text("Product detail")
-            if self.page.is_visible(EditPageLocators.added_product_in_product_detail):
-                self.click_on_span_contains_text("Change product")
-            else:
-                self.click_on_span_contains_text("Select product")
-        else:
-            self.click_on_span_contains_text("Add section")
-            self.page.dispatch_event("text=Product detailAdd >> button", "click")
-            self.click_on_span_contains_text("Select product")
-        # enable force click, avoiding the click event intercepts by the ancestor element
-        while self.page.is_disabled(EditPageLocators.span_contain_text.format("Add")):
-            self.page.wait_for_selector(
-                EditPageLocators.radio_button_in_product_chosen_modal.format(random.randint(1, 8)),
-                state="visible").click(force=True)
-        self.click_on_span_contains_text("Add")
+    def add_product_detail_with_random_product_to_regular_home_blogPost_page(self):
+        self.switch_tab("Content")
+        self.add_section("Product", "Product detail")
+        self.assign_product_to_product_detail()
         DATA_KEEPER['product_title'] = self.get_added_product_title()
+        self.enable_buy_now_btn()
+        self.page.click(EditPageLocators.back_button)
+
+    def add_product_detail_with_random_product_to_product_collection_page(self, page_type):
+        self.assign_product_or_collection_for_page_creation(page_type)
+        if page_type == "Product pages":
+            DATA_KEEPER['product_title'] = self.get_added_product_title()
+            self.switch_tab("Content")
+            self.add_section("Product", "Product detail")
+        else:
+            self.switch_tab("Content")
+            self.add_section("Product", "Product detail")
+            self.assign_product_to_product_detail()
+            DATA_KEEPER['product_title'] = self.get_added_product_title()
+        self.enable_buy_now_btn()
         self.page.click(EditPageLocators.back_button)
 
     def get_added_product_title(self):
@@ -104,10 +108,37 @@ class EditPage(BasePage):
         for product in self.page.query_selector_all(EditPageLocators.added_product_title):
             products_title.append(product.text_content())
 
-    def add_product_detail_with_random_product_to_product_page(self):
-        while self.page.is_visible(EditPageLocators.delete_button):
-            self.page.click(EditPageLocators.delete_button)
-        self.click_on_span_contains_text("Select products")
-        self.page.click(EditPageLocators.checkbox_button_in_product_chosen_modal.format(random.randint(1, 8)))
+    def assign_product_to_product_detail(self):
+        self.click_on_span_contains_text("Select product")
+        # enable force click, avoiding the click event intercepts by the ancestor element
+        while self.page.is_disabled(EditPageLocators.span_contain_text.format("Add")):
+            self.page.wait_for_selector(
+                EditPageLocators.radio_button_in_product_chosen_modal.format(random.randint(1, 8)),
+                state="visible").click(force=True)
         self.click_on_span_contains_text("Add")
-        DATA_KEEPER['product_title'] = self.get_added_product_title()
+
+    def assign_product_to_product_list(self, added_products_total):
+        self.click_on_span_contains_text("Add products")
+        for i in range(0, added_products_total):
+            self.page.click(EditPageLocators.checkbox_button_in_product_chosen_modal.format(i + 1))
+        self.click_on_span_contains_text("Add")
+
+    def add_section(self, modal_name, section_name, ):
+        self.click_on_span_contains_text("Add section")
+        self.page.locator("h2:has-text('{}')".format(modal_name)).scroll_into_view_if_needed()
+        self.page.dispatch_event("text={}Add >> button".format(section_name), "click")
+
+    def enable_buy_now_btn(self):
+        self.page.locator(EditPageLocators.buy_now_btn).scroll_into_view_if_needed()
+        if self.page.is_checked(EditPageLocators.buy_now_btn):
+            pass
+        else:
+            self.page.wait_for_timeout(1000)
+            self.page.click(EditPageLocators.buy_now_btn, force=True)
+
+    def create_blank_page(self, page_type):
+        if page_type in ["Collection pages", "Blog post pages"]:
+            self.page.click("text=Create a blank page")
+        else:
+            self.page.click("text=Create a page")
+            self.page.click("//span[text()='Create']")

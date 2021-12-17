@@ -19,11 +19,15 @@ def the_user_click_on_menu(page, page_type):
     pb_base_page.click_on_span_contains_text(page_type)
 
 
-@when(parsers.parse('the user add product detail into the first "{page_type}" with random product'))
+@when(parsers.parse('the user add product detail into the blank "{page_type}" with random product'))
 def add_product_detail_into_first_page(page, page_type):
     edit_page = EditPage(page)
-    edit_page.click_on_first_page_in_page_list()
-    edit_page.add_product_detail_with_random_product()
+    DATA_KEEPER["page_type"] = page_type
+    edit_page.create_blank_page(page_type)
+    if page_type in ["Collection pages", "Product pages"]:
+        edit_page.add_product_detail_with_random_product_to_product_collection_page(page_type)
+    else:
+        edit_page.add_product_detail_with_random_product_to_regular_home_blogPost_page()
     edit_page.switch_tab("Settings")
     edit_page.publish_page()
     if page_type == "Home page":
@@ -41,30 +45,37 @@ def check_if_publish_successfully_modal_pop_up(page):
 @then(parsers.parse('the user is able to see the same product in "{page_type}"'))
 def check_if_product_detail_display_correctly(page, page_type):
     edit_page = EditPage(page)
-    # switch tab to shopify store after clicking "view page"
-    with page.context.expect_page() as new_page_info:
+    with page.context.expect_page():
         edit_page.click_on_span_contains_text("View page")
-    new_page = new_page_info.value
-    shopify_page = ShopifyPage(new_page)
+    # switch tab to shopify store after clicking "view page"
+    shopify_page = ShopifyPage(page.context.pages[1])
     shopify_page.input_store_password()
-    if page_type == "Home page":
-        new_page.wait_for_load_state()
-    else:
-        shopify_page.page.close()
-        # switch tab to shopify store after clicking "view page"
-        with page.context.expect_page() as new_page_info:
-            edit_page.click_on_span_contains_text("View page")
-        new_page = new_page_info.value
-        # waiting for page loading, otherwise will return "NoneType" error
-        new_page.wait_for_load_state()
-        shopify_page = ShopifyPage(new_page)
+    page.context.pages[1].close()
+    with page.context.expect_page():
+        edit_page.click_on_span_contains_text("View page")
+    page.context.pages[1].wait_for_load_state(state="networkidle", timeout=60000)
+    shopify_page = ShopifyPage(page.context.pages[1])
     shopify_page.is_product_detail_display_correctly(DATA_KEEPER.get("product_title"))
 
 
-@when('the user add product detail into the first product page with random product')
-def add_product_detail_into_product_page_with_random_product(page):
-    edit_page = EditPage(page)
-    edit_page.click_on_first_page_in_page_list()
-    edit_page.add_product_detail_with_random_product_to_product_page()
-    edit_page.switch_tab("Settings")
-    edit_page.publish_page()
+@when(parsers.parse('the user click on "{button_name}"'))
+def click_button(page, button_name):
+    shopify_page = ShopifyPage(page.context.pages[1])
+    if button_name == "Buy it now":
+        with shopify_page.page.expect_navigation():
+            shopify_page.click_on_button_contains_text(button_name)
+    else:
+        shopify_page.click_on_button_contains_text(button_name)
+
+
+@then("the product appeared in cart")
+def check_if_add_to_cart_success(page):
+    shopify_page = ShopifyPage(page.context.pages[1])
+    shopify_page.is_product_in_cart(DATA_KEEPER.get("product_title"))
+    shopify_page.page.go_back()
+
+
+@then("the user is navigated to checkout page")
+def is_navigated_to_checkout_page(page):
+    page = page.context.pages[1]
+    assert "checkouts" in page.url, "checkout failed"

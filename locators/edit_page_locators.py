@@ -1,7 +1,7 @@
 class EditPageLocators:
     form_coupon_input = "//input[contains(@name,'couponCode')]"
     form_with_coupon_option = "//input[@value='customCoupon']//parent::span"
-    form_without_coupon_option = "input[value='noCoupon']"
+    form_without_coupon_option = "span:has(input[value='noCoupon'])"
     added_product_in_product_detail = "//div[contains(@class, 'ProductDetailContainer_product_list')]"
     div_contain_text = "//div[text()='{}']"
     delete_button = ".Polaris-Card__Subsection .Polaris-Button"
@@ -28,3 +28,4 @@ class EditPageLocators:
     back_button = "button[aria-label='back']"
     page_status = '.Polaris-VisuallyHidden-Badge'
     added_product_title = "//div[contains(@class, 'SelectedProductList_product_title')]"
+    buy_now_btn = "//span[text()='Shopify dynamic checkout button']//preceding-sibling::span/span/input"

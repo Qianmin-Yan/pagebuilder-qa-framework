@@ -1,3 +1,5 @@
+import time
+
 from pytest_bdd import given, when, then, parsers, scenarios
 
 from pages.edit_page import EditPage
@@ -10,11 +12,20 @@ def test_conftest():
     pass
 
 
-@given("the user add form with coupon into the first regular page")
+@given(parsers.parse('the user add form with coupon "{coupon_code}" into the first regular page'))
+def add_form_to_first_regular_page(page, coupon_code):
+    edit_page = EditPage(page)
+    edit_page.click_on_first_page_in_page_list()
+    edit_page.add_form_with_coupon(coupon_code)
+    edit_page.switch_tab("Settings")
+    edit_page.publish_page()
+
+
+@given(parsers.parse('the user add form without coupon into the first regular page'))
 def add_form_to_first_regular_page(page):
     edit_page = EditPage(page)
     edit_page.click_on_first_page_in_page_list()
-    edit_page.add_form_with_coupon()
+    edit_page.add_form_without_coupon()
     edit_page.switch_tab("Settings")
     edit_page.publish_page()
 
@@ -37,19 +48,17 @@ def visit_page(page, page_url):
 def submit_form(page, email):
     edit_page = EditPage(page)
     # switch tab to shopify store after clicking "view page"
-    with page.context.expect_page() as new_page_info:
+    with page.context.expect_page():
         edit_page.click_on_span_contains_text("View page")
-    new_page = new_page_info.value
-    shopify_page = ShopifyPage(new_page)
-    shopify_page.input_store_password()
-    shopify_page.page.close()
     # switch tab to shopify store after clicking "view page"
-    with page.context.expect_page() as new_page_info:
+    shopify_page = ShopifyPage(page.context.pages[1])
+    shopify_page.input_store_password()
+    page.context.pages[1].close()
+    with page.context.expect_page():
         edit_page.click_on_span_contains_text("View page")
-    new_page = new_page_info.value
-    # waiting for page loading, otherwise will return "NoneType" error
-    new_page.wait_for_load_state()
-    shopify_page = ShopifyPage(new_page)
+    page.context.pages[1].wait_for_load_state(state="networkidle", timeout=60000)
+    shopify_page = ShopifyPage(page.context.pages[1])
+    email = email.replace("@", "+_" + time.strftime("%Y%m%d_%H%M%S" + "@"))
     shopify_page.submit_form(email)
 
 
