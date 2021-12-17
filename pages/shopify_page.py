@@ -42,3 +42,11 @@ class ShopifyPage(BasePage):
         self.scroll_into_view(ShopifyPageLocators.product_detail_section)
         assert self.page.text_content(
             ShopifyPageLocators.product_title_in_product_detail_section).strip() == product_title, "display wrong product"
+
+    def is_product_in_cart(self, product_title):
+        self.page.wait_for_timeout(1000)
+        self.page.click(ShopifyPageLocators.cart)
+        assert self.page.wait_for_selector(ShopifyPageLocators.cart_item_title).text_content() == product_title, "add product to cart failed"
+
+    def click_on_button_contains_text(self, text):
+        self.page.click(ShopifyPageLocators.button_contains_text.format(text))

@@ -44,3 +44,6 @@ class ShopifyPageLocators:
     subscribing_message = ".apb_customer_form_banner_description"
     product_title_in_product_detail_section = ".apb_product_detail_information_title"
     product_detail_section = ".apb_product_detail_section"
+    cart = "#cart-icon-bubble"
+    cart_item_title = ".cart-item__name"
+    button_contains_text = 'button:has-text("{}")'

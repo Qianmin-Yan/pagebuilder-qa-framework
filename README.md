@@ -25,7 +25,8 @@ _pytest --headed --base-url https://page-builder.automizely.io -m "form" --allur
 
 `--base-url` specify testing environment base url
 
-`-m` run test cases with matched tags, eg. **_-m "form"_** means run test cases which has tag "form", add more than one tag using "and" to concat after it, eg. -m "form and product_detail".
+`-m` run test cases with matched tags, eg. **_-m "form"_** means run test cases which has tag "form", 
+**-m "ui and product_detail"** means run test cases which has tag "ui" and "product_detail". **-m "product_list or product_detail"** means run test cases which has tag "product_list" or "product_detail"
 
 ` --lf, --last-failed`   rerun only the tests that failed at the last run (or all if none failed)
 
@@ -36,9 +37,11 @@ add `breakpoint()` into code and run project
 ### code snippet for some cases 
 1. new page is created after clicking on an element, get the new page to interact with
 
-![img.png](img.png)
+`with page.context.expect_new_page():`
 
+    edit_page.click("button")
 
+`page.content.pages[index]`
 
 2. enable force click when the normal click will be intercepted by the ancestor element
 
