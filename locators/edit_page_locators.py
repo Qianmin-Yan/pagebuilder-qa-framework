@@ -1,4 +1,15 @@
 class EditPageLocators:
+    display_width_option = "//select[contains(@name,'displayWidth')]"
+    display_ratio_option = "//select[contains(@name,'displayRatio')]"
+    display_width_label = "label:has-text('Display width')"
+    video_link = "//input[contains(@name, 'youtubeUrl')]"
+    destination_url = "input[placeholder='https://www.yourstore.com']"
+    show_countdown_timer_btn = "//fieldset[contains(@id, 'CountDownTimer')]//span[@class='Polaris-RadioButton']"
+    h3_contain_text = "//h3[text()='{}']"
+    add_section = "//div[text()='{}']//following-sibling::div/button"
+    time_selector = "#PolarisSelect2"
+    tomorrow = "(//button[contains(@aria-label,'Today')]/parent::td/following-sibling::td/button)[1]"
+    page_list_counted = "//p[contains(@class, 'PageList_pages_text')]"
     form_coupon_input = "//input[contains(@name,'couponCode')]"
     form_with_coupon_option = "//input[@value='customCoupon']//parent::span"
     form_without_coupon_option = "span:has(input[value='noCoupon'])"
@@ -29,3 +40,7 @@ class EditPageLocators:
     page_status = '.Polaris-VisuallyHidden-Badge'
     added_product_title = "//div[contains(@class, 'SelectedProductList_product_title')]"
     buy_now_btn = "//span[text()='Shopify dynamic checkout button']//preceding-sibling::span/span/input"
+    next_month_button = "//button[contains(@aria-label,'Show next month')]"
+    first_day_in_month = "//button[(text()='1')]"
+    today = "//button[contains(@aria-label,'Today')]"
+    video_section_delete_button = "//span[text()='Video']/parent::div/following-sibling::div/button"

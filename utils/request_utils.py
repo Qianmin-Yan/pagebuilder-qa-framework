@@ -29,7 +29,7 @@ def delete_page(url, headers, params):
 
 def delete_all_pages(delete_get_url, unpublish_url_fmt, page_type, headers):
     url = delete_get_url + "?type=" + page_type
-    response = get(url, headers)
+    response = get(url + "&limit=30", headers)
     status_code = response["meta"]["code"]
     response_message = response["meta"]["message"]
     if status_code == 20000:

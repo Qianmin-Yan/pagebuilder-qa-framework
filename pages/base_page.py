@@ -15,9 +15,8 @@ class BasePage:
             self.page.click(PBBasePageLocators.return_to_login)
             self.page.type(LoginPageLocators.password, PASSWORD)
             self.page.click(LoginPageLocators.login_btn)
-            self.page.wait_for_timeout(3000)
+            self.page.wait_for_timeout(2000)
         assert self.wait_for_selector_state(PBBasePageLocators.page, "visible"), "Failed to login"
-        assert self.wait_for_selector_state(PBBasePageLocators.page_logo, "visible"), "Failed to login"
 
     def click_on_span_contains_text(self, text):
         self.page.click(PBBasePageLocators.span_contain_text.format(text))
@@ -44,3 +43,6 @@ class BasePage:
 
     def scroll_into_view(self, selector):
         self.page.wait_for_selector(selector).scroll_into_view_if_needed()
+
+    def element_inside_frame(self, frame_locator, element_locator):
+        return self.page.frame_locator(frame_locator).locator(element_locator)

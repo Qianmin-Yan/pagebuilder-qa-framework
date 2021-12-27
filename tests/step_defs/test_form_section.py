@@ -21,7 +21,7 @@ def add_form_to_first_regular_page(page, coupon_code):
     edit_page.publish_page()
 
 
-@given(parsers.parse('the user add form without coupon into the first regular page'))
+@given('the user add form without coupon into the first regular page')
 def add_form_to_first_regular_page(page):
     edit_page = EditPage(page)
     edit_page.click_on_first_page_in_page_list()
@@ -34,14 +34,6 @@ def add_form_to_first_regular_page(page):
 def check_if_publish_successfully_modal_pop_up(page):
     edit_page = EditPage(page)
     edit_page.is_publish_successfully_modal_pop_up()
-
-
-@given(parsers.parse('the user visit the page "{page_url}"'))
-def visit_page(page, page_url):
-    shopify_page = ShopifyPage(page)
-    shopify_page.page.goto(page_url)
-    shopify_page.input_store_password()
-    shopify_page.page.goto(page_url)
 
 
 @when(parsers.parse('the user submit form with "{email}"'))

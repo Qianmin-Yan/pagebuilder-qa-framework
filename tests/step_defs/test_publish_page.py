@@ -26,21 +26,15 @@ def the_user_click_on_menu(request, page, page_type):
 def publish_page_from_template(page, template_name, page_type):
     edit_page = EditPage(page)
     # wait for getting created pages length, avoid to create page in duplicated page url
-    edit_page.wait_for_selector_state("//p[contains(@class, 'PageList_pages_text')]", "visible")
+    edit_page.wait_for_page_list_counted()
     edit_page.click_on_template_in_page_list(template_name)
+    if page_type in ["Product pages", "Collection pages"]:
+        edit_page.assign_product_or_collection_for_page_creation(page_type)
     edit_page.publish_page()
     if page_type == "Home page":
         page.wait_for_timeout(500)
-    if edit_page.page.is_visible(EditPageLocators.confirm_to_publish_home_page_modal):
-        edit_page.click_on_span_contains_text("Confirm")
-
-
-@when(parsers.parse('the user choose template "{template_name}" to publish "{page_type}"'))
-def publish_page_with_template(page, template_name, page_type):
-    edit_page = EditPage(page)
-    edit_page.click_on_template_in_page_list(template_name)
-    edit_page.assign_product_or_collection_for_page_creation(page_type)
-    edit_page.publish_page()
+        if edit_page.page.is_visible(EditPageLocators.confirm_to_publish_home_page_modal):
+            edit_page.click_on_span_contains_text("Confirm")
 
 
 @then('the user should see the Published successfully modal pop up')
