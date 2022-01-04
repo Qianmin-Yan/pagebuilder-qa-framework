@@ -50,7 +50,8 @@ class ShopifyPageLocators:
     countdown_timer_section = ".apb_count_down_timer_section"
     image_in_image_section = ".apb_image_section"
     countdown_timer_section_in_product_detail = ".apb_product_detail_information_container .apb_time_count_down_timer_container"
+    video_section = ".apb_video_section"
     youtube_iframe_in_video_section = ".apb_video_section iframe"
-    youtube_play_button = 'button[aria-label="Play"]'
+    youtube_small_play_button = '.ytp-play-button'
     youtube_player = "#movie_player"
-    youtube_player_button = ".ytp-play-button"
+    youtube_large_play_button = ".ytp-large-play-button"

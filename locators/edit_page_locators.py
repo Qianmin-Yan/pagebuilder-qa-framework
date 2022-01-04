@@ -3,6 +3,7 @@ class EditPageLocators:
     display_ratio_option = "//select[contains(@name,'displayRatio')]"
     display_width_label = "label:has-text('Display width')"
     video_link = "//input[contains(@name, 'youtubeUrl')]"
+    text_header = "//input[contains(@name, 'data.heading')]"
     destination_url = "input[placeholder='https://www.yourstore.com']"
     show_countdown_timer_btn = "//fieldset[contains(@id, 'CountDownTimer')]//span[@class='Polaris-RadioButton']"
     h3_contain_text = "//h3[text()='{}']"
@@ -43,4 +44,4 @@ class EditPageLocators:
     next_month_button = "//button[contains(@aria-label,'Show next month')]"
     first_day_in_month = "//button[(text()='1')]"
     today = "//button[contains(@aria-label,'Today')]"
-    video_section_delete_button = "//span[text()='Video']/parent::div/following-sibling::div/button"
+    section_delete_button = "//span[text()='{}']/parent::div/following-sibling::div/button"

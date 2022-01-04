@@ -2,6 +2,8 @@ from datetime import time
 
 import requests
 
+from constants.contants import ADMIN_TESTING_BASE_URL, ADMIN_PROD_BASE_URL, DATA_KEEPER
+
 
 def get(url, headers=None, params=None):
     return requests.get(url=url, headers=headers, params=params).json()
@@ -60,3 +62,17 @@ def delete_all_pages(delete_get_url, unpublish_url_fmt, page_type, headers):
         print(
             "request failed, status code: " + str(
                 status_code) + ", error message: " + response_message + "\n request url: " + url)
+
+
+def get_admin_api_base_url(request):
+    base_url = request.config.getoption('--base-url')
+    if "io" in base_url:
+        return ADMIN_TESTING_BASE_URL
+    else:
+        return ADMIN_PROD_BASE_URL
+
+
+def get_headers(request):
+    if DATA_KEEPER.get("admin_api_base_url") in request.url:
+        DATA_KEEPER["headers"] = request.headers
+    return DATA_KEEPER

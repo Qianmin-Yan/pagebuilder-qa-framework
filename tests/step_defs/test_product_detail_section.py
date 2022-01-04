@@ -1,11 +1,11 @@
 from pytest_bdd import when, then, parsers, scenarios, given
 
-from constants.contants import DATA_KEEPER, ADMIN_TESTING_BASE_URL, ADMIN_PROD_BASE_URL
+from constants.contants import DATA_KEEPER
 from pages.shopify_page import ShopifyPage
 from locators.edit_page_locators import EditPageLocators
 from pages.edit_page import EditPage
 from pages.base_page import BasePage
-from utils.request_utils import delete_all_pages
+from utils.request_utils import delete_all_pages, get_admin_api_base_url, get_headers
 
 scenarios('../features/product_detail_section.feature')
 
@@ -17,7 +17,9 @@ def test_conftest():
 @given(parsers.parse('the user click on menu "{page_type}"'))
 def the_user_click_on_menu(request, page, page_type):
     pb_base_page = BasePage(page)
+    DATA_KEEPER['page_type'] = page_type
     DATA_KEEPER["admin_api_base_url"] = get_admin_api_base_url(request)
+    page.on("request", lambda r: get_headers(r))
     pb_base_page.click_on_span_contains_text(page_type)
 
 
@@ -68,7 +70,7 @@ def check_if_product_detail_display_correctly(page, page_type):
     page.context.pages[1].close()
     with page.context.expect_page():
         edit_page.click_on_span_contains_text("View page")
-    page.context.pages[1].wait_for_load_state(state="networkidle")
+    page.context.pages[1].wait_for_load_state(state="networkidle", timeout=60000)
     shopify_page = ShopifyPage(page.context.pages[1])
     shopify_page.is_product_detail_display_correctly(DATA_KEEPER.get("product_title"))
 
@@ -103,20 +105,6 @@ def teardown_function():
     get_delete_pages_url = DATA_KEEPER.get("admin_api_base_url") + "/pages"
     unpublish_url = DATA_KEEPER.get("admin_api_base_url") + "/pages/{page_id}/unpublish.action"
     delete_all_pages(get_delete_pages_url, unpublish_url, page_type, headers=headers)
-
-
-def get_headers(request):
-    if DATA_KEEPER.get("admin_api_base_url") in request.url:
-        DATA_KEEPER["headers"] = request.headers
-    return DATA_KEEPER
-
-
-def get_admin_api_base_url(request):
-    base_url = request.config.getoption('--base-url')
-    if "io" in base_url:
-        return ADMIN_TESTING_BASE_URL
-    else:
-        return ADMIN_PROD_BASE_URL
 
 
 @then("the user see the countdown timer shows")

@@ -11,9 +11,9 @@ Feature: The user is able to publish any kind of page from the template list
     Then the user should see the Published successfully modal pop up
     Examples:
       | page_type        | template_name                |
-      | Regular pages    | Christmas 01 page_list       |
+      | Regular pages    | Landing Page 01 page_list    |
       | Blog post pages  | Blog Post 02 page_list       |
-      | Home page        | New Year 01 page_list        |
-      | Product pages    | Christmas 01 page_list       |
+      | Home page        | Home Page 01 page_list       |
+      | Product pages    | Product Page 01 page_list    |
       | Collection pages | Collection Page 01 page_list |
 

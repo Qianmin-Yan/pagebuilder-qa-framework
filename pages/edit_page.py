@@ -19,8 +19,7 @@ class EditPage(BasePage):
         return self.page.get_attribute(EditPageLocators.page_name, "value")
 
     def is_publish_successfully_modal_pop_up(self):
-        assert self.wait_for_selector_state(selector=EditPageLocators.publish_successfully_modal,
-                                            state='visible'), "publish page failed"
+        assert self.is_element_present(selector=EditPageLocators.publish_successfully_modal), "publish page failed"
 
     def assign_product_or_collection_for_page_creation(self, page_type):
         if page_type == "Product pages":
@@ -32,14 +31,7 @@ class EditPage(BasePage):
 
     def add_product_list_with_products(self, added_products_total):
         self.switch_tab("Content")
-        self.page.wait_for_timeout(1000)
-        if self.page.is_visible(EditPageLocators.span_contain_text.format("Product list")):
-            self.click_on_span_contains_text("Product list")
-            if self.page.is_visible(EditPageLocators.added_product_in_product_list):
-                while self.page.is_visible(EditPageLocators.delete_button):
-                    self.page.click(EditPageLocators.delete_button)
-        else:
-            self.add_section("Sales boost", "Product list")
+        self.add_section("Product list")
         self.assign_product_to_product_list(added_products_total)
         self.page.click(EditPageLocators.back_button)
 
@@ -53,27 +45,15 @@ class EditPage(BasePage):
 
     def add_form_with_coupon(self, coupon_code):
         self.switch_tab("Content")
-        self.page.wait_for_timeout(1000)
-        if self.page.is_visible(EditPageLocators.span_contain_text.format("Form")):
-            self.click_on_span_contains_text("Form")
-            if self.page.is_checked(EditPageLocators.form_without_coupon_option):
-                self.page.click(EditPageLocators.form_with_coupon_option)
-                self.page.fill(EditPageLocators.form_coupon_input, coupon_code)
-        else:
-            self.add_section("Form", "Form")
-            self.page.click(EditPageLocators.form_with_coupon_option)
-            self.page.fill(EditPageLocators.form_coupon_input, coupon_code)
+        self.add_section("Email signup form")
+        self.page.click(EditPageLocators.form_with_coupon_option)
+        self.page.fill(EditPageLocators.form_coupon_input, coupon_code)
         self.page.click(EditPageLocators.back_button)
 
     def add_form_without_coupon(self):
-        self.page.click(EditPageLocators.content_tab)
-        self.page.wait_for_timeout(1000)
-        if self.page.is_visible(EditPageLocators.span_contain_text.format("Form")):
-            self.click_on_span_contains_text("Form")
-            if self.page.is_checked(EditPageLocators.form_with_coupon_option):
-                self.page.click(EditPageLocators.form_without_coupon_option)
-        else:
-            self.add_section("Form", "Form")
+        self.switch_tab("Content")
+        self.add_section("Email signup form")
+        self.page.click(EditPageLocators.form_without_coupon_option)
         self.page.click(EditPageLocators.back_button)
 
     def view_live_page(self):
@@ -81,7 +61,7 @@ class EditPage(BasePage):
 
     def add_product_detail_with_random_product_to_regular_home_blogPost_page(self):
         self.switch_tab("Content")
-        self.add_section("Product", "Product detail")
+        self.add_section("Product detail")
         self.assign_product_to_product_detail()
         DATA_KEEPER['product_title'] = self.get_added_product_title()
         self.enable_buy_now_btn()
@@ -89,7 +69,7 @@ class EditPage(BasePage):
 
     def add_product_detail_with_coutndown_timer_to_regular_page(self):
         self.switch_tab("Content")
-        self.add_section("Product", "Product detail")
+        self.add_section("Product detail")
         self.assign_product_to_product_detail()
         DATA_KEEPER['product_title'] = self.get_added_product_title()
         self.enable_countdown_timer_in_product_detail()
@@ -100,10 +80,10 @@ class EditPage(BasePage):
         if page_type == "Product pages":
             DATA_KEEPER['product_title'] = self.get_added_product_title()
             self.switch_tab("Content")
-            self.add_section("Product", "Product detail")
+            self.add_section("Product detail")
         else:
             self.switch_tab("Content")
-            self.add_section("Product", "Product detail")
+            self.add_section("Product detail")
             self.assign_product_to_product_detail()
             DATA_KEEPER['product_title'] = self.get_added_product_title()
         self.enable_buy_now_btn()
@@ -111,18 +91,14 @@ class EditPage(BasePage):
 
     def add_countdown_timer(self):
         self.switch_tab("Content")
-        self.page.wait_for_timeout(1000)
-        if self.page.is_visible(EditPageLocators.span_contain_text.format("Countdown timer")):
-            self.click_on_span_contains_text("Countdown timer")
-        else:
-            self.add_section("Sales boost", "Countdown timer")
-        self.scroll_into_view(":nth-match([class='Polaris-Connected'],2)")
+        self.add_section("Countdown timer")
         self.page.click(":nth-match([class='Polaris-Connected'],2)")
         self.page.click(EditPageLocators.today)
         self.page.select_option(selector=EditPageLocators.time_selector, value="00:00:00")
         self.page.click(":nth-match([class='Polaris-Connected'],3)")
         if is_today_the_last_day_in_current_month():
             self.page.click(EditPageLocators.next_month_button)
+            self.page.click(":nth-match([class='Polaris-Connected'],3)")
             self.page.click(EditPageLocators.first_day_in_month)
         else:
             self.page.click(EditPageLocators.tomorrow)
@@ -130,20 +106,15 @@ class EditPage(BasePage):
 
     def add_image(self, link):
         self.switch_tab("Content")
-        self.add_section("Media", "Image")
+        self.add_section("Image")
         self.upload_image()
-        self.page.type(EditPageLocators.destination_url, link)
+        self.page.fill(EditPageLocators.destination_url, link)
         self.page.click(EditPageLocators.back_button)
 
     def add_video(self, link):
         self.switch_tab("Content")
-        self.page.wait_for_timeout(1000)
-        if len(self.page.query_selector_all(EditPageLocators.span_contain_text.format("Video"))) > 0:
-            while len(self.page.query_selector_all(EditPageLocators.span_contain_text.format("Video"))) > 1:
-                self.page.click(EditPageLocators.video_section_delete_button, force=True)
-            self.click_on_span_contains_text("Video")
-        else:
-            self.add_section("Media", "Video")
+        self.add_section("Video")
+        self.page.fill(EditPageLocators.text_header, "")
         self.page.fill(EditPageLocators.video_link, link)
 
     def get_added_product_title(self):
@@ -164,18 +135,25 @@ class EditPage(BasePage):
         self.click_on_span_contains_text("Add")
 
     def assign_product_to_product_list(self, added_products_total):
+        while self.page.is_visible(EditPageLocators.delete_button):
+            self.page.click(EditPageLocators.delete_button)
         self.click_on_span_contains_text("Add products")
         for i in range(0, added_products_total):
             self.page.click(EditPageLocators.checkbox_button_in_product_chosen_modal.format(i + 1))
         self.click_on_span_contains_text("Add")
 
-    def add_section(self, modal_name, section_name, ):
-        self.click_on_span_contains_text("Add section")
-        self.page.locator("h2:has-text('{}')".format(modal_name)).scroll_into_view_if_needed()
-        self.page.click(EditPageLocators.add_section.format(section_name), force=True)
+    def add_section(self, section_name, ):
+        self.page.wait_for_selector(EditPageLocators.span_contain_text.format("Footer"))
+        if len(self.page.query_selector_all(EditPageLocators.span_contain_text.format(section_name))) > 0:
+            while len(self.page.query_selector_all(EditPageLocators.span_contain_text.format(section_name))) > 1:
+                self.page.click(EditPageLocators.section_delete_button.format(section_name), force=True)
+            self.click_on_span_contains_text(section_name)
+        else:
+            self.click_on_span_contains_text("Add section")
+            self.page.hover(EditPageLocators.add_section.format(section_name))
+            self.page.click(EditPageLocators.add_section.format(section_name))
 
     def enable_buy_now_btn(self):
-        self.page.locator(EditPageLocators.buy_now_btn).scroll_into_view_if_needed()
         if self.page.is_checked(EditPageLocators.buy_now_btn):
             pass
         else:
@@ -190,17 +168,16 @@ class EditPage(BasePage):
             self.page.click("//span[text()='Create']")
 
     def wait_for_page_list_counted(self):
-        self.wait_for_selector_state(EditPageLocators.page_list_counted, "visible")
+        self.page.wait_for_selector(selector=EditPageLocators.page_list_counted, state="visible")
 
     def upload_image(self):
-        self.click_on_span_contains_text("Remove")
+        if self.page.is_visible(EditPageLocators.span_contain_text.format("Remove")):
+            self.click_on_span_contains_text("Remove")
         # the file path is based on the runner path
         self.page.set_input_files(selector="//input[@type='file']", files="./test_data/test.gif")
 
     def enable_countdown_timer_in_product_detail(self):
-        self.scroll_into_view(EditPageLocators.div_contain_text.format("Sales boost"))
         self.click_on_div_contains_text("Sales boost")
-        self.scroll_into_view(EditPageLocators.h3_contain_text.format("Countdown timer"))
         self.page.check(EditPageLocators.show_countdown_timer_btn)
 
     def set_video_display_ratio_and_width(self, display_ratio, display_width):
@@ -216,7 +193,6 @@ class EditPage(BasePage):
             assert self.page.is_visible(
                 "text=Enter a valid YouTube URL"), "URL validation issue, invalid link take as valid link"
         elif is_valid == "invalid" and link == "":
-
             assert self.page.is_visible(
                 "text=This field is required"), "URL validation issue, this field is required, but no error shows"
         elif is_valid == "valid":

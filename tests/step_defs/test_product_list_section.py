@@ -50,6 +50,6 @@ def check_if_product_list_display_correctly(page, added_products_total):
     page.context.pages[1].close()
     with page.context.expect_page():
         edit_page.click_on_span_contains_text("View page")
-    page.context.pages[1].wait_for_load_state(state="networkidle")
+    page.context.pages[1].wait_for_load_state(state="networkidle", timeout=60000)
     shopify_page = ShopifyPage(page.context.pages[1])
     shopify_page.is_product_list_display_correctly(added_products_total)

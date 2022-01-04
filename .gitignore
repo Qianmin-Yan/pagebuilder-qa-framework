@@ -4,3 +4,4 @@ allure-results
 tests/step_defs/.pytest_cache
 tests/.pytest_cache
 *.pyc
+test-results

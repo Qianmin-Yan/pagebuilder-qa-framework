@@ -43,10 +43,13 @@ def check_if_image_shows(page):
 
 
 @then(parsers.parse('the user is able to play and pause the video in screen {viewport_size}'))
-def check_if_user_is_redirected_when_clicking_image(page, viewport_size):
+def check_if_user_is_redirected_when_clicking_image(request, page, viewport_size):
     shopify_page = ShopifyPage(page.context.pages[1])
     viewport_size = json.loads(viewport_size)
     shopify_page.is_video_able_to_be_played(viewport_size)
+    # scroll to make sure the pause button visible in any of the page
+    if request.config.getoption('--headed'):
+        shopify_page.page.evaluate("window.scrollBy(0,100)")
     shopify_page.is_video_able_to_be_paused()
 
 

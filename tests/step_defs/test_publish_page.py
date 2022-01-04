@@ -1,10 +1,10 @@
 from pytest_bdd import given, when, then, parsers, scenarios, scenario
 
-from constants.contants import ADMIN_TESTING_BASE_URL, ADMIN_PROD_BASE_URL, DATA_KEEPER
+from constants.contants import DATA_KEEPER
 from locators.edit_page_locators import EditPageLocators
 from pages.base_page import BasePage
 from pages.edit_page import EditPage
-from utils.request_utils import delete_all_pages
+from utils.request_utils import delete_all_pages, get_admin_api_base_url, get_headers
 
 scenarios('../features/publish_page.feature')
 
@@ -41,20 +41,6 @@ def publish_page_from_template(page, template_name, page_type):
 def check_if_publish_successfully_modal_pop_up(page):
     edit_page = EditPage(page)
     edit_page.is_publish_successfully_modal_pop_up()
-
-
-def get_headers(request):
-    if DATA_KEEPER.get("admin_api_base_url") in request.url:
-        DATA_KEEPER["headers"] = request.headers
-    return DATA_KEEPER
-
-
-def get_admin_api_base_url(request):
-    base_url = request.config.getoption('--base-url')
-    if "io" in base_url:
-        return ADMIN_TESTING_BASE_URL
-    else:
-        return ADMIN_PROD_BASE_URL
 
 
 def teardown_function():
