@@ -1,4 +1,4 @@
-from pytest_bdd import given, when, then, parsers, scenarios, scenario
+from pytest_bdd import given, when, then, parsers, scenarios
 
 from constants.contants import DATA_KEEPER
 from locators.edit_page_locators import EditPageLocators

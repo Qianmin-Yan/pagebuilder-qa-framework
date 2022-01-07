@@ -45,3 +45,10 @@ class BasePage:
             return True
         except TimeoutError:
             return False
+
+    def is_element_present_before_timeout(self, selector, timeout) -> bool:
+        try:
+            self.page.wait_for_selector(selector, timeout=timeout)
+            return True
+        except TimeoutError:
+            return False

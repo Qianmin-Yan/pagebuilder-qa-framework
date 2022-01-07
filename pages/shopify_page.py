@@ -65,7 +65,7 @@ class ShopifyPage(BasePage):
     def is_redirected_when_clicking_image_link(self, link):
         with self.page.expect_navigation():
             self.page.click(ShopifyPageLocators.image_in_image_section)
-        assert self.page.url == link, "navigation failed"
+        assert link.strip("/") in self.page.url, "navigation failed"
 
     def is_vide_show(self):
         assert self.is_element_present(ShopifyPageLocators.youtube_iframe_in_video_section)
